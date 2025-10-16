@@ -1,0 +1,27 @@
+{
+  "name": "24-urenloop-board",
+  "version": "1.0.0",
+  "description": "Realtime board voor 24-urenloop events",
+  "private": true,
+  "scripts": {
+    "install:all": "npm install && cd server && npm install && cd ../client && npm install",
+    "dev:server": "cd server && npm run dev",
+    "dev:client": "cd client && npm run dev",
+    "dev": "concurrently \"npm run dev:server\" \"npm run dev:client\"",
+    "start:server": "cd server && npm start",
+    "build:client": "cd client && npm run build",
+    "test:server": "cd server && npm test",
+    "docker:up": "docker-compose up -d",
+    "docker:down": "docker-compose down",
+    "docker:logs": "docker-compose logs -f",
+    "docker:restart": "docker-compose down && docker-compose up -d",
+    "clean": "rm -rf server/node_modules client/node_modules node_modules",
+    "setup": "chmod +x quickstart.sh && ./quickstart.sh"
+  },
+  "keywords": ["24-urenloop", "realtime", "websocket"],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "concurrently": "^8.2.0"
+  }
+}

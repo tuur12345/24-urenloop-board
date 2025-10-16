@@ -1,0 +1,31 @@
+[Unit]
+Description=24-urenloop Board Server
+After=network.target redis-server.service
+Wants=redis-server.service
+
+[Service]
+Type=simple
+User=www-data
+Group=www-data
+WorkingDirectory=/opt/24-urenloop-board/server
+Environment="NODE_ENV=production"
+Environment="PORT=3001"
+Environment="REDIS_HOST=localhost"
+Environment="REDIS_PORT=6379"
+Environment="CORS_ORIGIN=*"
+ExecStart=/usr/bin/node src/index.js
+Restart=on-failure
+RestartSec=10
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=twentyfourhour
+
+# Security hardening
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/opt/24-urenloop-board/server
+
+[Install]
+WantedBy=multi-user.target
