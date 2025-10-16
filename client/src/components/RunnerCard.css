@@ -77,3 +77,29 @@
 .remove-button:active {
   transform: scale(0.95);
 }
+
+.time-edit {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.time-edit input {
+  width: 60px;
+  text-align: center;
+  font-size: 1rem;
+  padding: 2px 4px;
+}
+
+.apply-button {
+  background: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 2px 6px;
+  cursor: pointer;
+  font-weight: bold;
+}
+.apply-button:hover {
+  background: #43a047;
+}

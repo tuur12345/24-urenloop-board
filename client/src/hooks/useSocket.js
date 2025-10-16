@@ -19,6 +19,8 @@ function useSocket() {
       transports: ['websocket'],
       upgrade: false
     });
+
+    window.socket = socket; 
     
     // Connection handlers
     socket.on('connect', () => {
@@ -107,13 +109,20 @@ function useSocket() {
       socket.emit('runner:remove', { id, pin });
     }
   }, []);
-  
+
+  const updateRunnerTime = useCallback((id, newElapsed) => {
+    if (socket && socket.connected) {
+      socket.emit('runner:updateTime', { id, elapsed: newElapsed });
+    }
+  }, []);
+
   return {
     runners,
     connectionStatus,
     addRunner,
     moveRunner,
-    removeRunner
+    removeRunner,
+    updateRunnerTime
   };
 }
 

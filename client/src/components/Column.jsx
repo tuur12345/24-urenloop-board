@@ -2,7 +2,7 @@ import { useState } from 'react';
 import RunnerCard from './RunnerCard';
 import './Column.css';
 
-function Column({ title, status, runners, onMove, onRemove, emoji }) {
+function Column({ title, status, runners, onMove, onRemove, onManualTimeUpdate, emoji }) {
   const [isDragOver, setIsDragOver] = useState(false);
   
   const handleDragOver = (e) => {
@@ -27,8 +27,8 @@ function Column({ title, status, runners, onMove, onRemove, emoji }) {
         onMove(runnerId, status);
       }
     }
-  };
-  
+  }; 
+
   return (
     <div 
       className={`column ${isDragOver ? 'drag-over' : ''}`}
@@ -55,6 +55,7 @@ function Column({ title, status, runners, onMove, onRemove, emoji }) {
               key={runner.id}
               runner={runner}
               onRemove={onRemove}
+              onManualTimeUpdate={onManualTimeUpdate}
             />
           ))
         )}

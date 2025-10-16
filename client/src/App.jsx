@@ -14,7 +14,8 @@ function App() {
     connectionStatus,
     addRunner,
     moveRunner,
-    removeRunner
+    removeRunner,
+    updateRunnerTime
   } = useSocket();
   
   const handleAddRunner = (e) => {
@@ -112,7 +113,9 @@ function App() {
         runners={runners}
         onMove={moveRunner}
         onRemove={handleRemoveRunner}
+        onManualTimeUpdate={updateRunnerTime}
       />
+
       
       <footer className="footer">
         <p>Totaal lopers: {Object.keys(runners).length}</p>
