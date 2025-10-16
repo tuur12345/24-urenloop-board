@@ -2,9 +2,9 @@
 
 Een realtime dashboard voor het beheren van lopers tijdens een 24-urenloop, gesynchroniseerd via LAN.
 
-Check INSTALLATION_GUIDE.md voor meer info over installatie voor elk besturingsysteem
+Check [installatie gids](INSTALLATION.md) voor meer info over installatie voor elk besturingsysteem
 
-## 📊 Architectuur
+## Architectuur
 
 ### Data Flow
 ```
@@ -19,7 +19,7 @@ Client n ─────┘                    │
 2. **running** - Lopen (loper is aan het lopen, start tijd)
 3. **done** - Heeft gelopen (loper is aangekomen, stop tijd)
 
-## 🤝 Development
+## Development
 
 ### Code Structure
 - **Server**: Express routes + Socket.IO handlers → Business logic → Redis
@@ -31,6 +31,11 @@ Client n ─────┘                    │
 - Server tijd is referentie voor alle timestamps
 - Max ~100 gelijktijdige runners
 
-## 🆘 Support
+## Support
 
 Bij problemen: check de issues in deze repository of open een nieuwe.
+
+
+
+
+Gecreëerd met behulp van Claude.ai :)
