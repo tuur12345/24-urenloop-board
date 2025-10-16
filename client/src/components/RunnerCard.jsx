@@ -8,21 +8,22 @@ function RunnerCard({ runner, onRemove }) {
   useEffect(() => {
     const calculateElapsed = () => {
       const now = Date.now();
-      let startTime = runner.start_ts;
+      let startTime = 0;
       let endTime = null;
-      
-      // Determine which timestamp to use based on status
-      if (runner.status === 'done' && runner.end_ts) {
+
+      if (runner.status === 'warming') {
+        startTime = runner.start_ts;
+      } else if (runner.status === 'queue') {
+        startTime = runner.queue_ts || now;
+      } else if (runner.status === 'done') {
+        startTime = runner.queue_ts || runner.start_ts;
         endTime = runner.end_ts;
-      } else if (runner.status === 'queue' && runner.queue_ts) {
-        // Show time from queue start
-        startTime = runner.queue_ts;
       }
-      
-      // Calculate elapsed
+
       const elapsed = endTime ? (endTime - startTime) : (now - startTime);
       setElapsed(Math.max(0, elapsed));
     };
+
     
     // Initial calculation
     calculateElapsed();
@@ -34,6 +35,15 @@ function RunnerCard({ runner, onRemove }) {
     }
   }, [runner]);
   
+useEffect(() => {
+  if (runner.status === 'queue') {
+    // reset the base timestamp each time it enters queue
+    setElapsed(0);
+    runner.queue_ts = Date.now();
+  }
+}, [runner.status]);
+
+
   const formatTime = (ms) => {
     const totalSeconds = Math.floor(ms / 1000);
     const minutes = Math.floor(totalSeconds / 60);
@@ -42,6 +52,10 @@ function RunnerCard({ runner, onRemove }) {
   };
   
   const handleDragStart = (e) => {
+    if (runner.status === 'done') {
+      e.preventDefault();
+      return;
+    }
     e.dataTransfer.setData('application/json', JSON.stringify({
       runnerId: runner.id,
       currentStatus: runner.status
@@ -51,9 +65,9 @@ function RunnerCard({ runner, onRemove }) {
   
   const handleRemove = (e) => {
     e.stopPropagation();
-    if (window.confirm(`Weet je zeker dat je ${runner.name} wilt verwijderen?`)) {
+    //if (window.confirm(`Weet je zeker dat je ${runner.name} wilt verwijderen?`)) {
       onRemove(runner.id);
-    }
+    //}
   };
   
   return (

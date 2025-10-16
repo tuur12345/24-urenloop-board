@@ -16,9 +16,10 @@ function Board({ runners, onMove, onRemove }) {
   });
   
   // Sort by timestamp (newest first for warming/queue, oldest first for done)
-  runnersByStatus.warming.sort((a, b) => b.start_ts - a.start_ts);
-  runnersByStatus.queue.sort((a, b) => (b.queue_ts || 0) - (a.queue_ts || 0));
-  runnersByStatus.done.sort((a, b) => (a.end_ts || 0) - (b.end_ts || 0));
+  runnersByStatus.warming.sort((a, b) => a.start_ts - b.start_ts);        
+  runnersByStatus.queue.sort((a, b) => (b.queue_ts || 0) - (a.queue_ts || 0)); 
+  runnersByStatus.done.sort((a, b) => (b.end_ts || 0) - (a.end_ts || 0));
+
   
   return (
     <div className="board">

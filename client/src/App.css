@@ -10,7 +10,7 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: white;
   min-height: 100vh;
 }
 
@@ -24,7 +24,7 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: white;
+  background: lightgray;
   padding: 20px 30px;
   border-radius: 12px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -61,7 +61,7 @@ body {
 }
 
 .add-runner-section {
-  background: white;
+  background: lightgray;
   padding: 20px 30px;
   border-radius: 12px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -110,7 +110,7 @@ body {
 }
 
 .add-runner-button:disabled {
-  background: #ccc;
+  background: #929292;
   cursor: not-allowed;
   transform: none;
 }

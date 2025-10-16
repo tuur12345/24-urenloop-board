@@ -1,5 +1,5 @@
 .runner-card {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: gray;
   color: white;
   padding: 16px;
   border-radius: 10px;
@@ -13,8 +13,9 @@
 }
 
 .runner-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 6px 12px rgba(102, 126, 234, 0.4);
+  background-color: rgb(151, 149, 149);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(52, 52, 53, 0.4);
 }
 
 .runner-card:active {
