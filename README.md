@@ -2,15 +2,33 @@
 
 Een realtime dashboard voor het beheren van lopers tijdens een 24-urenloop, gesynchroniseerd via LAN.
 
+## Vereisten
+1. Windows 10 of hoger
+2. Install [Git](https://git-scm.com/downloads/win) 
+3. Install [Node.js LTS](https://nodejs.org/en/download)
+4. Connect an Ethernet cable between both computers
+
 ## Computer 1 (Server + Client)
-1. Install Node.js LTS (from nodejs.org)
-2. Connect an Ethernet cable between both computers
-3. Run `setup_server.bat` as admin
+1. Install Git and Node.js
+2. 1. Open a terminal as admin (Win+X, select Command Prompt (Admin))
+3. Voer uit
+   ```console
+   git clone https://github.com/tuur12345/24-urenloop-board.git
+   cd 24-urenloop-board
+   setup_server.bat
+   ``
 4. The app should open automatically
 
 ## Computer 2 (Client)
-1. Run `setup_client.bat` as admin
-2. The app should open automatically
+1. Install Git and Node.js
+2. 1. Open a terminal as admin (Win+X, select Command Prompt (Admin))
+3. Voer uit
+   ```console
+   git clone https://github.com/tuur12345/24-urenloop-board.git
+   cd 24-urenloop-board
+   setup_client.bat
+   ``
+4. The app should open automatically
 
 
 ## Architectuur
