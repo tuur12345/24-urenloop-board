@@ -2,7 +2,6 @@
 
 Een realtime dashboard voor het beheren van lopers tijdens een 24-urenloop, volledig gesynchroniseerd via LAN (zonder internet).
 
-------------------------------------------------------------
 ⚙️ Vereisten
 ------------------------------------------------------------
 1. Windows 10 of hoger
@@ -10,7 +9,7 @@ Een realtime dashboard voor het beheren van lopers tijdens een 24-urenloop, voll
 3. Download [Node.js (LTS)](https://nodejs.org/en/download)
 2. Download [Redis (.msi file)](https://github.com/tporadowski/redis/releases)
 4. Beide computers verbonden via een ethernetkabel
-------------------------------------------------------------
+
 🖥️ Computer 1 — Server + Client
 ------------------------------------------------------------
 Deze computer draait de server (data-opslag) én de client (website).
@@ -27,7 +26,6 @@ Het kan zijn de Node.js eerst nog toegang nodig heeft van Windows Firewall, na d
 
 setup_server.bat stelt een statisch IP in, controleert Node, Git en Redis, vult client/.env met het server-IP, installeert dependencies, start server en een client en opent de browser naar het serveradres.
 
-------------------------------------------------------------
 💻 Computer 2 — Client
 ------------------------------------------------------------
 1. Open een terminal als administrator (Win+X → Command Prompt (Admin))
@@ -40,7 +38,6 @@ setup_server.bat stelt een statisch IP in, controleert Node, Git en Redis, vult 
 
 setup_client.bat stelt een statisch IP in, controleert Node, Git en Redis, vult client/.env met het server-IP, installeert dependencies, start een client en opent de browser naar het serveradres.
 
-------------------------------------------------------------
 🌐 Architectuur
 ------------------------------------------------------------
 Client 1 ─────┐
@@ -51,14 +48,6 @@ Client 2 ─────┘                    │
 Server draait op Computer 1  
 Clients zijn alle andere apparaten op hetzelfde LAN (browser-only)
 
-------------------------------------------------------------
-🏃 Runner Statussen
-------------------------------------------------------------
-warming  → Loper is aan het opwarmen  
-queue    → Loper wacht om te starten  
-done     → Loper heeft gelopen  
-
-------------------------------------------------------------
 🧩 Development
 ------------------------------------------------------------
 Server: Express + Socket.IO + Redis  
