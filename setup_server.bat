@@ -1,53 +1,39 @@
 @echo off
-setlocal enabledelayedexpansion
-title 24-Urenloop Server Setup
+setlocal
 
-:: ===== CONFIG =====
+:: === Configuration ===
 set IP=10.45.228.10
 set MASK=255.255.255.0
-set GATEWAY=10.45.228.1
-set DNS=1.1.1.1
-set ADAPTER_NAME=
+set REDIS_HOST=127.0.0.1
+set REDIS_PORT=6379
 
-:: ===== FIND ADAPTER AUTOMATICALLY =====
-for /f "tokens=2 delims=:" %%A in ('netsh interface show interface ^| findstr /C:"Dedicated"') do (
-    set ADAPTER_NAME=%%A
-    set ADAPTER_NAME=!ADAPTER_NAME:~1!
-    goto found
-)
-:found
-if "%ADAPTER_NAME%"=="" (
-    echo [ERROR] No active Ethernet adapter found. Please plug in the cable.
-    pause
-    exit /b
-)
+:: === Set static IP ===
+netsh interface ip set address name="Ethernet" static %IP% %MASK%
 
-echo Using adapter: %ADAPTER_NAME%
-
-:: ===== ASSIGN STATIC IP =====
-echo Setting static IP %IP% on %ADAPTER_NAME% ...
-netsh interface ip set address name="%ADAPTER_NAME%" static %IP% %MASK% %GATEWAY%
-netsh interface ip set dns name="%ADAPTER_NAME%" static %DNS%
-
-:: ===== CHECK NODE INSTALL =====
+:: === Check Node.js ===
 where node >nul 2>&1
 if %errorlevel% neq 0 (
-    echo [ERROR] Node.js not found. Please install Node.js LTS first.
+    echo Node.js not found. Please install Node.js LTS first.
     pause
     exit /b
 )
 
-:: ===== WRITE ENV FILE =====
+:: === Check Redis ===
+powershell -Command "try { $tcp = Test-NetConnection -ComputerName %REDIS_HOST% -Port %REDIS_PORT%; if (-not $tcp.TcpTestSucceeded) { exit 1 } } catch { exit 1 }"
+if %errorlevel% neq 0 (
+    echo Redis is not running on %REDIS_HOST%:%REDIS_PORT%. Please start Redis before continuing.
+    pause
+    exit /b
+)
+
+:: === Update client/.env ===
 echo VITE_SERVER_URL=http://%IP%:3001 > client/.env
 
-:: ===== INSTALL DEPENDENCIES =====
-echo Installing dependencies...
+:: === Start server + client ===
 start cmd /k "cd server && npm install && npm run start"
 start cmd /k "cd client && npm install && npm run dev -- --host 0.0.0.0"
 
-:: ===== OPEN SITE =====
-timeout /t 5 >nul
+:: === Open site in browser ===
 start http://%IP%:5173
 
-echo [✓] Server running at http://%IP%:5173
 pause
