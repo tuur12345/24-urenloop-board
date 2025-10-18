@@ -14,7 +14,8 @@ Een realtime dashboard voor het beheren van lopers tijdens een 24-urenloop, voll
       ```console
       node -v
       npm -v
-4. Verbind beide computers via een ethernetkabel
+4. Download [Redis (.msi file)](https://github.com/tporadowski/redis/releases)
+5. Verbind beide computers via een ethernetkabel
 ------------------------------------------------------------
 🖥️ Computer 1 — Server + Client
 ------------------------------------------------------------
