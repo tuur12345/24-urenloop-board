@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import useSocket from './hooks/useSocket';
 import Board from './components/Board';
 import './App.css';
@@ -9,6 +9,8 @@ function App() {
   const [showPinPrompt, setShowPinPrompt] = useState(false);
   const [pendingRemoveId, setPendingRemoveId] = useState(null);
   
+  const inputRef = useRef(null);
+
   const {
     runners,
     connectionStatus,
@@ -25,11 +27,9 @@ function App() {
       setName('');
     }
   };
-  
+
   const handleRemoveRunner = (id) => {
-    // Check if PIN is required (you can make this configurable)
-    const requiresPin = false; // Set to true if ADMIN_PIN is configured
-    
+    const requiresPin = false;
     if (requiresPin && !showPinPrompt) {
       setPendingRemoveId(id);
       setShowPinPrompt(true);
@@ -40,23 +40,33 @@ function App() {
       setPin('');
     }
   };
-  
+
   const handleRemoveAll = (status) => {
     if (status === 'done') {
       removeAllRunners(pin || undefined);
     }
   };
-  
+
   const cancelPinPrompt = () => {
     setShowPinPrompt(false);
     setPendingRemoveId(null);
     setPin('');
   };
-  
+
+  useEffect(() => {
+    const handleKeydown = (e) => {
+      if (!showPinPrompt && inputRef.current && document.activeElement !== inputRef.current) {
+        inputRef.current.focus();
+      }
+    };
+    document.addEventListener('keydown', handleKeydown);
+    return () => document.removeEventListener('keydown', handleKeydown);
+  }, [showPinPrompt]);
+
   return (
     <div className="app">
       <header className="header">
-        <h1>🏃 24-urenloop Board</h1>
+        <h1>24-urenloop Board</h1>
         <div className={`status status-${connectionStatus}`}>
           {connectionStatus === 'connected' && '● Verbonden'}
           {connectionStatus === 'connecting' && '◐ Verbinden...'}
@@ -67,6 +77,7 @@ function App() {
       <div className="add-runner-section">
         <form onSubmit={handleAddRunner} className="add-runner-form">
           <input
+            ref={inputRef}
             type="text"
             value={name}
             onChange={(e) => setName(e.target.value)}

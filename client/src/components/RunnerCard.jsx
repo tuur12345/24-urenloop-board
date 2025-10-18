@@ -51,9 +51,7 @@ function RunnerCard({ runner, onRemove }) {
   
   const handleRemove = (e) => {
     e.stopPropagation();
-    if (window.confirm(`Weet je zeker dat je ${runner.name} wilt verwijderen?`)) {
-      onRemove(runner.id);
-    }
+    onRemove(runner.id);
   };
   
   return (

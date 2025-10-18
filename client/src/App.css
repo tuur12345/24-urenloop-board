@@ -10,9 +10,14 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background: white;
+  background: rgb(255, 255, 255);
   min-height: 100vh;
-}
+  background-image: url(logo.png);
+  background-repeat: no-repeat;
+  background-size: 840px;
+  background-position-y: 105px;
+  background-position-x: center;
+} 
 
 .app {
   max-width: 1400px;
@@ -24,7 +29,7 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: #e6e6e9;
+  background: rgb(230, 230, 233, 0.95);
   padding: 20px 30px;
   border-radius: 12px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -61,7 +66,7 @@ body {
 }
 
 .add-runner-section {
-  background: #e6e6e9;
+  background: rgb(230, 230, 233, 0.9);
   padding: 20px 30px;
   border-radius: 12px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -76,20 +81,11 @@ body {
 .add-runner-input {
   flex: 1;
   padding: 12px 16px;
-  border: 2px solid #e0e0e0;
+  border: 2px solid #667eea;
+  outline: none;
   border-radius: 8px;
   font-size: 16px;
   transition: border-color 0.3s ease;
-}
-
-.add-runner-input:focus {
-  outline: none;
-  border-color: #667eea;
-}
-
-.add-runner-input:disabled {
-  background: #f5f5f5;
-  cursor: not-allowed;
 }
 
 .add-runner-button {
@@ -201,7 +197,7 @@ body {
 .footer {
   text-align: center;
   margin-top: 20px;
-  color: white;
+  color: rgb(0, 0, 0);
   font-size: 14px;
   opacity: 0.9;
 }
