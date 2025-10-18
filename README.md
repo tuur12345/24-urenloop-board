@@ -1,63 +1,74 @@
 # 24-urenloop Realtime Board
 
-Een realtime dashboard voor het beheren van lopers tijdens een 24-urenloop, gesynchroniseerd via LAN.
+Een realtime dashboard voor het beheren van lopers tijdens een 24-urenloop, volledig gesynchroniseerd via LAN (zonder internet).
 
-## Vereisten
+------------------------------------------------------------
+⚙️ Vereisten
+------------------------------------------------------------
 1. Windows 10 of hoger
-2. Install [Git](https://git-scm.com/downloads/win) 
-3. Install [Node.js LTS](https://nodejs.org/en/download)
-4. Connect an Ethernet cable between both computers
+2. Download [Git](https://git-scm.com/download/win)
+   → Tijdens installatie: vink “Add Git to PATH” aan.
+3. Download [Node.js (LTS)](https://nodejs.org/en/download)
+   → Controleer installatie:
+      Win+R, type cmd
+      ```console
+      node -v
+      npm -v
+4. Verbind beide computers via een ethernetkabel
+------------------------------------------------------------
+🖥️ Computer 1 — Server + Client
+------------------------------------------------------------
+Deze computer draait de server (data-opslag) én de client (website).
 
-## Computer 1 (Server + Client)
-1. Install Git and Node.js
-2. Open a terminal as admin (Win+X, select Command Prompt (Admin))
-3. Voer uit
+1. Open een terminal als administrator (Win+X → Command Prompt (Admin) of PowerShell (Admin))
+2. Voer uit:
    ```console
    git clone https://github.com/tuur12345/24-urenloop-board.git
    cd 24-urenloop-board
    setup_server.bat
-4. The app should open automatically
+3. Wacht tot het script klaar is. De website opent automatisch (standaard op http://10.45.228.10:5173/)
 
-## Computer 2 (Client)
-1. Install Git and Node.js
-2. Open a terminal as admin (Win+X, select Command Prompt (Admin))
-3. Voer uit
+Kort: setup_server.bat stelt een statisch IP in, controleert Node/Git, installeert dependencies, vult client/.env met het server-IP, en start server + client.
+
+------------------------------------------------------------
+💻 Computer 2 — Client
+------------------------------------------------------------
+1. Open een terminal als administrator (Win+X → Command Prompt (Admin) of PowerShell (Admin))
+2. Voer uit:
    ```console
    git clone https://github.com/tuur12345/24-urenloop-board.git
    cd 24-urenloop-board
    setup_client.bat
-4. The app should open automatically
+3. De browser opent automatisch naar de serverpagina en toont dezelfde data in realtime.
 
+Kort: setup_client.bat stelt een statisch IP in en opent de browser naar het serveradres.
 
-## Architectuur
-
-### Data Flow
-```
+------------------------------------------------------------
+🌐 Architectuur
+------------------------------------------------------------
 Client 1 ─────┐
-              ├──> Socket.IO ──> Server ──> Redis (AOF)
+              ├──> Socket.IO ──> Server ──> Redis (persistent)
 Client 2 ─────┘                    │
                                    └──> Broadcast to all clients
-```
 
-### Runner States
-1. **warming** - Opwarmen (loper is aan het opwarmen)
-2. **queue** - Wachtrij (loper staat in de wachtrij om te lopen)
-3. **done** - Heeft gelopen (loper is aangekomen)
+Server draait op Computer 1  
+Clients zijn alle andere apparaten op hetzelfde LAN (browser-only)
 
-## Development
+------------------------------------------------------------
+🏃 Runner Statussen
+------------------------------------------------------------
+warming  → Loper is aan het opwarmen  
+queue    → Loper wacht om te starten  
+done     → Loper heeft gelopen  
 
-### Code Structure
-- **Server**: Express routes + Socket.IO handlers → Business logic → Redis
-- **Client**: React components met Socket.IO hooks → Optimistic UI updates
-- **State sync**: Server is single source of truth, client wordt resync'd bij conflicts
+------------------------------------------------------------
+🧩 Development
+------------------------------------------------------------
+Server: Express + Socket.IO + Redis  
+Client: React + Socket.IO  
+Sync: Server is single source of truth; clients resync bij conflicts
 
-### Aannames
-- LAN heeft stabiele latency (<50ms)
-- Server tijd is referentie voor alle timestamps
-- Max ~100 gelijktijdige runners
-
-## Support
-
-Bij problemen: check de issues in deze repository of open een nieuwe.
-
-Gecreëerd met behulp van Claude.ai :)
+Aannames:
+- LAN latency < 50 ms
+- Servertijd = referentie
+- Max ~100 gelijktijdige lopers
