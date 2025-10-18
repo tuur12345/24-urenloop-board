@@ -1,30 +1,37 @@
 @echo off
-setlocal
+setlocal enabledelayedexpansion
+title 24-Urenloop Client Setup
 
-:: Define IP
-set IP=10.45.228.10
+:: ===== CONFIG =====
+set SERVER_IP=10.45.228.10
+set MY_IP=10.45.228.11
 set MASK=255.255.255.0
+set GATEWAY=10.45.228.1
+set DNS=1.1.1.1
+set ADAPTER_NAME=
 
-:: Set static IP (replace "Ethernet" if your adapter has another name)
-netsh interface ip set address name="Ethernet" static %IP% %MASK%
-
-:: Check Node.js
-where node >nul 2>&1
-if %errorlevel% neq 0 (
-  echo Node.js not found. Please install Node.js LTS first.
-  pause
-  exit /b
+:: ===== FIND ADAPTER =====
+for /f "tokens=2 delims=:" %%A in ('netsh interface show interface ^| findstr /C:"Dedicated"') do (
+    set ADAPTER_NAME=%%A
+    set ADAPTER_NAME=!ADAPTER_NAME:~1!
+    goto found
+)
+:found
+if "%ADAPTER_NAME%"=="" (
+    echo [ERROR] No active Ethernet adapter found. Please plug in the cable.
+    pause
+    exit /b
 )
 
-:: Update client/.env
-echo VITE_SERVER_URL=http://%IP%:3001 > client/.env
+echo Using adapter: %ADAPTER_NAME%
 
-:: Start server + client
-start cmd /k "cd server && npm install && npm run start"
-start cmd /k "cd client && npm install && npm run dev -- --host %IP%"
+:: ===== ASSIGN STATIC IP =====
+echo Setting static IP %MY_IP% on %ADAPTER_NAME% ...
+netsh interface ip set address name="%ADAPTER_NAME%" static %MY_IP% %MASK% %GATEWAY%
+netsh interface ip set dns name="%ADAPTER_NAME%" static %DNS%
 
-echo Server running at http://%IP%:5173
-
-:: Open site
+:: ===== OPEN SITE =====
+timeout /t 3 >nul
 start http://%SERVER_IP%:5173
+echo [✓] Connected to server %SERVER_IP%
 pause
