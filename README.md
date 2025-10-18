@@ -23,6 +23,8 @@ Deze computer draait de server (data-opslag) én de client (website).
    .\setup_server.bat
 3. Wacht tot het script klaar is. De website opent automatisch (standaard op http://10.45.228.10:5173/)
 
+Het kan zijn de Node.js eerst nog toegang nodig heeft van Windows Firewall, na dit te accepteren moet je opnieuw .\setup_server.bat runnen.
+
 setup_server.bat stelt een statisch IP in, controleert Node, Git en Redis, vult client/.env met het server-IP, installeert dependencies, start server en een client en opent de browser naar het serveradres.
 
 ------------------------------------------------------------
