@@ -31,26 +31,8 @@ echo VITE_SERVER_URL=http://%SERVER_IP%:%SERVER_PORT% > client\.env
 :: Install dependencies
 :: -----------------------------
 echo Installing server dependencies...
-cd server
-npm install
-cd ..
-
-echo Installing client dependencies...
-cd client
-npm install
-cd ..
-
-:: -----------------------------
-:: Start server
-:: -----------------------------
-start cmd /k "cd server && npm run start"
-echo Server started on port %SERVER_PORT%
-
-:: -----------------------------
-:: Start client
-:: -----------------------------
-start cmd /k "cd client && npm run dev -- --host 0.0.0.0 --port %CLIENT_PORT%"
-echo Client started on port %CLIENT_PORT%
+start cmd /k "cd server && npm install && npm run start"
+start cmd /k "cd client && npm install && npm run dev -- --host 0.0.0.0 --port %CLIENT_PORT%"
 
 :: -----------------------------
 :: Open client in default browser
