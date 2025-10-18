@@ -2,7 +2,16 @@
 
 Een realtime dashboard voor het beheren van lopers tijdens een 24-urenloop, gesynchroniseerd via LAN.
 
-Check [installatie gids](INSTALLATION.md) voor meer info over installatie voor elk besturingsysteem
+## Computer 1 (Server + Client)
+1. Install Node.js LTS (from nodejs.org)
+2. Connect an Ethernet cable between both computers
+3. Run `setup_server.bat` as admin
+4. The app should open automatically
+
+## Computer 2 (Client)
+1. Run `setup_client.bat` as admin
+2. The app should open automatically
+
 
 ## Architectuur
 
@@ -10,14 +19,14 @@ Check [installatie gids](INSTALLATION.md) voor meer info over installatie voor e
 ```
 Client 1 ─────┐
               ├──> Socket.IO ──> Server ──> Redis (AOF)
-Client n ─────┘                    │
+Client 2 ─────┘                    │
                                    └──> Broadcast to all clients
 ```
 
 ### Runner States
 1. **warming** - Opwarmen (loper is aan het opwarmen)
-2. **running** - Lopen (loper is aan het lopen, start tijd)
-3. **done** - Heeft gelopen (loper is aangekomen, stop tijd)
+2. **queue** - Wachtrij (loper staat in de wachtrij om te lopen)
+3. **done** - Heeft gelopen (loper is aangekomen)
 
 ## Development
 
@@ -34,8 +43,5 @@ Client n ─────┘                    │
 ## Support
 
 Bij problemen: check de issues in deze repository of open een nieuwe.
-
-
-
 
 Gecreëerd met behulp van Claude.ai :)
