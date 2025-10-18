@@ -10,24 +10,22 @@ Een realtime dashboard voor het beheren van lopers tijdens een 24-urenloop, gesy
 
 ## Computer 1 (Server + Client)
 1. Install Git and Node.js
-2. 1. Open a terminal as admin (Win+X, select Command Prompt (Admin))
+2. Open a terminal as admin (Win+X, select Command Prompt (Admin))
 3. Voer uit
    ```console
    git clone https://github.com/tuur12345/24-urenloop-board.git
    cd 24-urenloop-board
    setup_server.bat
-   ``
 4. The app should open automatically
 
 ## Computer 2 (Client)
 1. Install Git and Node.js
-2. 1. Open a terminal as admin (Win+X, select Command Prompt (Admin))
+2. Open a terminal as admin (Win+X, select Command Prompt (Admin))
 3. Voer uit
    ```console
    git clone https://github.com/tuur12345/24-urenloop-board.git
    cd 24-urenloop-board
    setup_client.bat
-   ``
 4. The app should open automatically
 
 
