@@ -33,8 +33,35 @@
   font-weight: 700;
 }
 
-.column-emoji {
-  font-size: 24px;
+.column-header-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.remove-all-button {
+  background: #d45662;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.remove-all-button:hover {
+  background: #c82333;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(220, 53, 69, 0.3);
+}
+
+.remove-all-button:active {
+  transform: translateY(0);
 }
 
 .column-count {
@@ -79,3 +106,4 @@
 .column-content::-webkit-scrollbar-thumb:hover {
   background: #5568d3;
 }
+

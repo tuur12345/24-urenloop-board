@@ -2,7 +2,7 @@ import { useState } from 'react';
 import RunnerCard from './RunnerCard';
 import './Column.css';
 
-function Column({ title, status, runners, onMove, onRemove, onManualTimeUpdate, emoji }) {
+function Column({ title, status, runners, onMove, onRemove, onRemoveAll }) {
   const [isDragOver, setIsDragOver] = useState(false);
   
   const handleDragOver = (e) => {
@@ -27,8 +27,20 @@ function Column({ title, status, runners, onMove, onRemove, onManualTimeUpdate, 
         onMove(runnerId, status);
       }
     }
-  }; 
-
+  };
+  
+  const handleRemoveAll = () => {
+    if (runners.length === 0) return;
+    
+    const confirmed = window.confirm(
+      `Weet je zeker dat je alle ${runners.length} gelopen runner(s) wilt verwijderen?`
+    );
+    
+    if (confirmed && onRemoveAll) {
+      onRemoveAll(status);
+    }
+  };
+  
   return (
     <div 
       className={`column ${isDragOver ? 'drag-over' : ''}`}
@@ -38,10 +50,20 @@ function Column({ title, status, runners, onMove, onRemove, onManualTimeUpdate, 
     >
       <div className="column-header">
         <h2>
-          <span className="column-emoji">{emoji}</span>
           {title}
         </h2>
-        <span className="column-count">{runners.length}</span>
+        <div className="column-header-right">
+          {status === 'done' && runners.length > 0 && (
+            <button 
+              className="remove-all-button" 
+              onClick={handleRemoveAll}
+              title="Verwijder alle gelopen runners"
+            >
+              Alles wissen
+            </button>
+          )}
+          <span className="column-count">{runners.length}</span>
+        </div>
       </div>
       
       <div className="column-content">
@@ -55,7 +77,6 @@ function Column({ title, status, runners, onMove, onRemove, onManualTimeUpdate, 
               key={runner.id}
               runner={runner}
               onRemove={onRemove}
-              onManualTimeUpdate={onManualTimeUpdate}
             />
           ))
         )}

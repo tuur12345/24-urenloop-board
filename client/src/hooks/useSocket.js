@@ -19,8 +19,6 @@ function useSocket() {
       transports: ['websocket'],
       upgrade: false
     });
-
-    window.socket = socket; 
     
     // Connection handlers
     socket.on('connect', () => {
@@ -76,6 +74,17 @@ function useSocket() {
       });
     });
     
+    socket.on('runner:allRemoved', (data) => {
+      console.log('All done runners removed:', data);
+      setRunners(prev => {
+        const newRunners = { ...prev };
+        data.ids.forEach(id => {
+          delete newRunners[id];
+        });
+        return newRunners;
+      });
+    });
+    
     socket.on('error', (error) => {
       console.error('Server error:', error);
       if (error.resync) {
@@ -109,20 +118,20 @@ function useSocket() {
       socket.emit('runner:remove', { id, pin });
     }
   }, []);
-
-  const updateRunnerTime = useCallback((id, newElapsed) => {
+  
+  const removeAllRunners = useCallback((pin) => {
     if (socket && socket.connected) {
-      socket.emit('runner:updateTime', { id, elapsed: newElapsed });
+      socket.emit('runner:removeAll', { pin });
     }
   }, []);
-
+  
   return {
     runners,
     connectionStatus,
     addRunner,
     moveRunner,
     removeRunner,
-    updateRunnerTime
+    removeAllRunners
   };
 }
 

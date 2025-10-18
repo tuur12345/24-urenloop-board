@@ -15,7 +15,7 @@ function App() {
     addRunner,
     moveRunner,
     removeRunner,
-    updateRunnerTime
+    removeAllRunners
   } = useSocket();
   
   const handleAddRunner = (e) => {
@@ -38,6 +38,12 @@ function App() {
       setShowPinPrompt(false);
       setPendingRemoveId(null);
       setPin('');
+    }
+  };
+  
+  const handleRemoveAll = (status) => {
+    if (status === 'done') {
+      removeAllRunners(pin || undefined);
     }
   };
   
@@ -113,9 +119,8 @@ function App() {
         runners={runners}
         onMove={moveRunner}
         onRemove={handleRemoveRunner}
-        onManualTimeUpdate={updateRunnerTime}
+        onRemoveAll={handleRemoveAll}
       />
-
       
       <footer className="footer">
         <p>Totaal lopers: {Object.keys(runners).length}</p>

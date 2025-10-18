@@ -97,6 +97,32 @@ export function setupSocketHandlers(io) {
       }
     });
     
+    // Remove all runners with status 'done'
+    socket.on('runner:removeAll', async (data) => {
+      try {
+        const { pin } = data;
+        
+        // Check optional PIN
+        if (process.env.ADMIN_PIN && pin !== process.env.ADMIN_PIN) {
+          socket.emit('error', { message: 'Invalid PIN' });
+          return;
+        }
+        console.log("await runnerservice")
+        const result = await runnerService.removeAllDone(socket.id);
+        console.log(result)
+        if (result.error) {
+          socket.emit('error', { message: result.error });
+          return;
+        }
+        console.log("broadcast to all clients")
+        // Broadcast to all clients
+        io.emit('runner:allRemoved', { ids: result.removedIds });
+      } catch (err) {
+        console.error('Error removing all runners:', err);
+        socket.emit('error', { message: 'Failed to remove all runners' });
+      }
+    });
+    
     // Disconnect
     socket.on('disconnect', () => {
       console.log(`✗ Client disconnected: ${socket.id}`);

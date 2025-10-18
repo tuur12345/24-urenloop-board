@@ -1,5 +1,5 @@
 .runner-card {
-  background: gray;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
   padding: 16px;
   border-radius: 10px;
@@ -51,7 +51,7 @@
 
 .remove-button {
   background: rgba(255, 255, 255, 0.2);
-  border: 2px solid white;
+  border: 2px solid rgb(221, 221, 221);
   color: white;
   width: 32px;
   height: 32px;
@@ -59,7 +59,7 @@
   font-size: 24px;
   line-height: 1;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.1s ease;
   display: flex;
   align-items: center;
   justify-content: center;

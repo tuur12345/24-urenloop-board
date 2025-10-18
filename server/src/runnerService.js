@@ -93,7 +93,8 @@ export async function moveRunner(id, toStatus, actor = 'system') {
   runner.last_modified_by = actor;
   
   // Set timestamps based on status
-  if (toStatus === 'queue' && !runner.queue_ts) {
+  // IMPORTANT: Always set queue_ts when moving TO queue (resets timer)
+  if (toStatus === 'queue') {
     runner.queue_ts = now;
   } else if (toStatus === 'done' && !runner.end_ts) {
     runner.end_ts = now;
@@ -135,6 +136,36 @@ export async function removeRunner(id, actor = 'system') {
   });
   
   return { success: true, id };
+}
+
+/**
+ * Remove all runners with status 'done'
+ */
+export async function removeAllDone(actor = 'system') {
+  const state = await getState();
+  const removedIds = [];
+  
+  // Find all runners with status 'done'
+  Object.values(state.runners).forEach(runner => {
+    if (runner.status === 'done') {
+      removedIds.push(runner.id);
+      delete state.runners[runner.id];
+    }
+  });
+  
+  if (removedIds.length === 0) {
+    return { error: 'No done runners to remove' };
+  }
+  
+  await saveState(state);
+  
+  await logEvent({
+    type: 'removeAll',
+    actor,
+    data: { count: removedIds.length, ids: removedIds }
+  });
+  
+  return { success: true, removedIds };
 }
 
 /**
