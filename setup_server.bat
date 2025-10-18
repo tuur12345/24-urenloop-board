@@ -1,39 +1,62 @@
 @echo off
 setlocal
 
-:: === Configuration ===
-set IP=10.45.228.10
+:: -----------------------------
+:: Configuration
+:: -----------------------------
+set SERVER_IP=10.45.228.10
 set MASK=255.255.255.0
-set REDIS_HOST=127.0.0.1
-set REDIS_PORT=6379
+set CLIENT_PORT=5173
+set SERVER_PORT=3001
+set INTERFACE_NAME=Ethernet
 
-:: === Set static IP ===
-netsh interface ip set address name="Ethernet" static %IP% %MASK%
-
-:: === Check Node.js ===
-where node >nul 2>&1
+:: -----------------------------
+:: Set static IP
+:: -----------------------------
+echo Setting static IP for %INTERFACE_NAME% to %SERVER_IP%
+netsh interface ip set address name="%INTERFACE_NAME%" static %SERVER_IP% %MASK%
 if %errorlevel% neq 0 (
-    echo Node.js not found. Please install Node.js LTS first.
+    echo Failed to set IP. Make sure the interface name is correct and cable is connected.
     pause
     exit /b
 )
 
-:: === Check Redis ===
-powershell -Command "try { $tcp = Test-NetConnection -ComputerName %REDIS_HOST% -Port %REDIS_PORT%; if (-not $tcp.TcpTestSucceeded) { exit 1 } } catch { exit 1 }"
-if %errorlevel% neq 0 (
-    echo Redis is not running on %REDIS_HOST%:%REDIS_PORT%. Please start Redis before continuing.
-    pause
-    exit /b
-)
+:: -----------------------------
+:: Update client .env
+:: -----------------------------
+echo Updating client/.env with server IP
+echo VITE_SERVER_URL=http://%SERVER_IP%:%SERVER_PORT% > client\.env
 
-:: === Update client/.env ===
-echo VITE_SERVER_URL=http://%IP%:3001 > client/.env
+:: -----------------------------
+:: Install dependencies
+:: -----------------------------
+echo Installing server dependencies...
+cd server
+npm install
+cd ..
 
-:: === Start server + client ===
-start cmd /k "cd server && npm install && npm run start"
-start cmd /k "cd client && npm install && npm run dev -- --host 0.0.0.0"
+echo Installing client dependencies...
+cd client
+npm install
+cd ..
 
-:: === Open site in browser ===
-start http://%IP%:5173
+:: -----------------------------
+:: Start server
+:: -----------------------------
+start cmd /k "cd server && npm run start"
+echo Server started on port %SERVER_PORT%
 
+:: -----------------------------
+:: Start client
+:: -----------------------------
+start cmd /k "cd client && npm run dev -- --host 0.0.0.0 --port %CLIENT_PORT%"
+echo Client started on port %CLIENT_PORT%
+
+:: -----------------------------
+:: Open client in default browser
+:: -----------------------------
+timeout /t 5 /nobreak >nul
+start http://%SERVER_IP%:%CLIENT_PORT%
+
+echo Setup complete. Server + Client running.
 pause
