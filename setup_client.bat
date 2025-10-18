@@ -9,6 +9,8 @@ set MY_IP=10.45.228.11
 set MASK=255.255.255.0
 set CLIENT_PORT=5173
 set INTERFACE_NAME=Ethernet
+set REDIS_HOST=127.0.0.1
+set REDIS_PORT=6379
 
 :: -----------------------------
 :: Set static IP
@@ -20,6 +22,34 @@ if %errorlevel% neq 0 (
     pause
     exit /b
 )
+
+:: -----------------------------
+:: === Check Node.js ===
+:: -----------------------------
+where node >nul 2>&1
+if %errorlevel% neq 0 (
+    echo Node.js not found. Please install Node.js LTS first.
+    pause
+    exit /b
+)
+
+:: -----------------------------
+:: === Check Redis ===
+:: -----------------------------
+powershell -Command "try { $tcp = Test-NetConnection -ComputerName %REDIS_HOST% -Port %REDIS_PORT%; if (-not $tcp.TcpTestSucceeded) { exit 1 } } catch { exit 1 }"
+
+:: -----------------------------
+:: Update client .env
+:: -----------------------------
+echo Updating client/.env with server IP
+echo VITE_SERVER_URL=http://%SERVER_IP%:%SERVER_PORT% > client\.env
+
+:: -----------------------------
+:: Install dependencies
+:: -----------------------------
+echo Installing server dependencies...
+start cmd /k "cd client && npm install && npm run dev -- --host 0.0.0.0 --port %CLIENT_PORT%"
+
 
 :: -----------------------------
 :: Open client in default browser
