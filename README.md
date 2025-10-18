@@ -40,6 +40,7 @@ setup_client.bat stelt een statisch IP in, controleert Node, Git en Redis, vult 
 
 🌐 Architectuur
 ------------------------------------------------------------
+```console
 Client 1 ─────┐
               |
               ├──> Socket.IO ──> Server ──> Redis (persistent)
